@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-
+//출력 //보요주기용
 public class PlayerCharacter : MonoBehaviour
 {
     //유니티 제공
@@ -12,48 +12,63 @@ public class PlayerCharacter : MonoBehaviour
     //오브젝트 시작될때 호출 되는 함수
     void Start()
     {
-        ChangeState(eState.RUN);
+       
     }
 
     // 프레임 마다 호출
     void Update()
     {
-
-    }
-
-    //캐릭터의 상태
-    public enum eState
-    {
-        IDLE,
-        RUN
-    };
-
-    void ChangeState(eState state)
-    {
-        switch (state)
+        LayerMask groundMask = 1 << LayerMask.NameToLayer("Ground");//그라운드이름의 레이어를 캐릭터 레이를 통해 검사
+        RaycastHit2D hitFromGround = Physics2D.Raycast(transform.position, Vector2.down, 2.0f, groundMask);
+        if (null != hitFromGround.transform)
         {
-
-            case eState.IDLE:
-                _veloctity.x = 0.0f;
-                _veloctity.y = 0.0f;
-                GetAnimator().SetBool("isGround", true);
-                break;
-            case eState.RUN:
-                _veloctity.x = 5.0f;
-                _veloctity.y = 0.0f;
-                GetAnimator().SetBool("isGround", true);
-                GetAnimator().SetFloat("Horizontal", _veloctity.x);
-                break;
+            if (false == _isGround)
+            {
+                _isGround = true;
+                GetAnimator().SetBool("isGround", _isGround);
+            }
+        }
+        else
+        {
+            if (true == _isGround)
+            {
+                _isGround = false;
+                GetAnimator().SetBool("isGround", _isGround);
+            }
         }
     }
 
-    Vector2 _veloctity = Vector2.zero;
+    //캐릭터의 상태
 
-
-    public Vector2 GetVelocity()
+    bool _canDoubleJump;
+    bool _isGround = false;
+    public void Jump()
     {
-        return _veloctity;
+        if (true == _isGround)
+        {
+            JumpAction();
+            _canDoubleJump = true;
+        }
+        else if (true == _canDoubleJump)
+        {
+            JumpAction();
+            _canDoubleJump = false;
+        }
     }
+
+    void JumpAction()
+    {
+        GetAnimator().SetTrigger("Jump");
+
+
+        //강제로 점프크기 조정
+        float jumpSpeed = 8.0f;
+        Vector2 veolocity = gameObject.GetComponent<Rigidbody2D>().velocity;
+        veolocity.y = jumpSpeed;
+        gameObject.GetComponent<Rigidbody2D>().velocity = veolocity;
+    }
+
+
 
     //animator
 
@@ -61,4 +76,16 @@ public class PlayerCharacter : MonoBehaviour
     {
         return gameObject.GetComponent<Animator>();
     }
+
+    public void IdleState()
+    {
+        
+        GetAnimator().SetFloat("Horizontal", 0.0f);
+    }
+    public void RunState()
+    {
+
+        GetAnimator().SetFloat("Horizontal", 1.0f);
+    }
+
 }

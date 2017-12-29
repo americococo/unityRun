@@ -11,6 +11,8 @@ public class BlockCreator : MonoBehaviour
 
     void Update()
     {
+        if (false == _isCreate)
+            return;
         if(_createInteval <= _createDuration)
         {
             _createDuration = 0.0f;
@@ -19,6 +21,17 @@ public class BlockCreator : MonoBehaviour
         _createDuration += Time.deltaTime;
     }
 
+
+    //state
+    bool _isCreate = false;
+    public void StartCreate()
+    {
+        _isCreate = true;
+    }
+
+
+
+    //block
     public GameObject BlockPrefabs;
 
     private float _createInteval=0.5f;
