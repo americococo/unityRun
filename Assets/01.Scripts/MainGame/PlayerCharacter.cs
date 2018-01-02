@@ -38,31 +38,45 @@ public class PlayerCharacter : MonoBehaviour
         }
     }
 
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if("Block"==collision.tag)
+        {
+            _player.RestSpeed();
+        }
+    }
+
+
+    //Init
+    Player _player;
+
+    public void Init(Player player)
+    {
+        _player = player;
+    }
     //캐릭터의 상태
 
     bool _canDoubleJump;
     bool _isGround = false;
-    public void Jump()
+    public void Jump(float jumpSpeed)
     {
         if (true == _isGround)
         {
-            JumpAction();
+            JumpAction(jumpSpeed);
             _canDoubleJump = true;
         }
         else if (true == _canDoubleJump)
         {
-            JumpAction();
+            JumpAction(jumpSpeed);
             _canDoubleJump = false;
         }
     }
 
-    void JumpAction()
+    void JumpAction(float jumpSpeed)
     {
         GetAnimator().SetTrigger("Jump");
 
-
         //강제로 점프크기 조정
-        float jumpSpeed = 8.0f;
         Vector2 veolocity = gameObject.GetComponent<Rigidbody2D>().velocity;
         veolocity.y = jumpSpeed;
         gameObject.GetComponent<Rigidbody2D>().velocity = veolocity;

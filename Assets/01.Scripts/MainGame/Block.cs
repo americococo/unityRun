@@ -20,5 +20,9 @@ public class Block : MonoBehaviour
             _velocity = playerVelocity;
             gameObject.GetComponent<Rigidbody2D>().velocity = -_velocity;
         }
+        if(transform.position.x < -15)
+        {
+            GameObject.Destroy(gameObject, 5.0f);
+        }
     }
 }
