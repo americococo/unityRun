@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Block : MonoBehaviour
+public class Coin : MonoBehaviour
 {
     Vector2 _velocity = Vector2.zero;
 
@@ -15,5 +15,13 @@ public class Block : MonoBehaviour
     void Update()
     {
 
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if ("Player" == collision.tag)
+        {
+            GameObject.Destroy(gameObject);
+        }
     }
 }

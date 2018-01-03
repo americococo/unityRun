@@ -43,11 +43,11 @@ public class BlockCreator : MonoBehaviour
 
 
 
-    //block
+    //preFabs
     public GameObject BlockPrefabs;
+    public GameObject Coin1Prefabs;
+    public GameObject Coin2Prefabs;
 
-    //private float _createInteval=0.5f;
-    //private float _createDuration;
     GameObject _prevBlockObject;
 
     //test하기위해 public으로
@@ -57,18 +57,37 @@ public class BlockCreator : MonoBehaviour
     {
         //prefab 오브젝트 인스턴스화
         GameObject blockObject = GameObject.Instantiate(BlockPrefabs);
-
-        //transform-> 위치 각 크기 
         blockObject.transform.position = transform.position;
 
+        //GameObject coin1Object = GameObject.Instantiate(Coin1Prefabs);
+        //coin1Object.transform.position = new Vector2(transform.position.x, 2.5f);
+
+        //GameObject coin2Object = GameObject.Instantiate(Coin2Prefabs);
+        //coin2Object.transform.position = new Vector2(transform.position.x, 6.0f);
+
+
+        GameObject coin1Object;
+        GameObject coin2Object;
+        int selectCoin = Random.Range(0, 1000);
+        if(selectCoin <500)
+        {
+            coin1Object = GameObject.Instantiate(Coin1Prefabs);
+            coin2Object = GameObject.Instantiate(Coin2Prefabs);
+        }
+        else
+        {
+            coin1Object = GameObject.Instantiate(Coin2Prefabs);
+            coin2Object = GameObject.Instantiate(Coin1Prefabs);
+        }
+        coin1Object.transform.position = new Vector2(transform.position.x, 4.0f);
+        coin2Object.transform.position = new Vector2(transform.position.x, 8.0f);
         int randValue = Random.Range(0, 1000);
         if(randValue<300)
         {
-            blockObject.transform.position = new Vector2(blockObject.transform.position.x, 2.5f);
+            blockObject.transform.position = new Vector2(blockObject.transform.position.x, 4.5f);
+            coin1Object.transform.position = transform.position;
         }
 
-        //임시 주석추리
-        //GameObject.Destroy(blockObject, 6.0f);
 
         return blockObject;
     }
