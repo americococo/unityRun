@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class Coin : MonoBehaviour
 {
-    Vector2 _velocity = Vector2.zero;
+    public float AddWeight = 0.0f;
+    public float AddHP = 0.0f;
 
     //유니티 제공 함수
     void Start()
@@ -21,6 +22,8 @@ public class Coin : MonoBehaviour
     {
         if ("Player" == collision.tag)
         {
+            MainGameManger.instance.GetPlayer().AddWeight(AddWeight);
+            MainGameManger.instance.GetPlayer().InCreaseHP(AddHP);
             GameObject.Destroy(gameObject);
         }
     }
