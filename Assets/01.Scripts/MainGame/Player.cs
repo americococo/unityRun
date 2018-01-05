@@ -11,6 +11,8 @@ public class Player : MonoBehaviour
     {
         _currentWeight = _startWeight;
         _currentHP = _maxHP;
+        _distance = 0.0f;
+
         PlayerView.Init(this);
     }
 
@@ -23,6 +25,7 @@ public class Player : MonoBehaviour
 
         if (eState.RUN == _state)
         {
+            UpdateDistance();
             if (_veloctity.x < _maxSpeed)
             {
                 _veloctity.x += _addSpeed;
@@ -32,9 +35,21 @@ public class Player : MonoBehaviour
                 _veloctity.x = _maxSpeed;
             }
 
-            UpdateHP();
             UpdateWeight();
+            UpdateHP();
 
+            UpdateSpeedByWeight();
+        }
+    }
+    void UpdateDistance()
+    {
+        //거리 = 시간 * 속도
+        float deltaDistance = _veloctity.x * Time.deltaTime;
+        _distance += deltaDistance;
+
+        if(_maxDistance <= _distance)
+        {
+            ChangeState(eState.COMPLETE);
         }
     }
 
@@ -60,11 +75,41 @@ public class Player : MonoBehaviour
         }
     }
 
+    void UpdateSpeedByWeight()
+    {
+        if(120.0f < _currentWeight)
+        {
+            _maxSpeed = 10.0f;
+        }
+        else if (100.0f < _currentWeight )
+        {
+            _maxSpeed = 11.0f;
+        }
+        else if (80.0f < _currentWeight)
+        {
+            _maxSpeed = 12.5f;
+        }
+        else if (60.0f < _currentWeight)
+        {
+            _maxSpeed = 14.0f;
+        }
+        else if (40.0f <= _currentWeight)
+        {
+            _maxSpeed = 15.0f;
+        }
+
+
+    }
+
+
+
+
     public enum eState
     {
         IDLE,
         RUN,
         DEATH,
+        COMPLETE,
     };
 
     eState _state = eState.IDLE;
@@ -99,13 +144,41 @@ public class Player : MonoBehaviour
             return false;
     }
 
+    public bool iSComPlete()
+    {
+        float deltaWeight = _goalWeight - _currentWeight;
+        float deltaWeightOffset = Mathf.Abs(deltaWeight);
+
+        if (deltaWeightOffset < 5.0f)
+            return true;
+        return false;
+    }
+
+    float _maxDistance=500.0f;
+    float _distance=0.0f;
+
+    public float GetGoalWeight()
+    {
+        return _goalWeight;
+    }
+
+    public float GetDistance()
+    {
+        return _distance;
+    }
+
+    public float getMaxDistance()
+    {
+        return _maxDistance;
+    }
+
     //Weight
     float _maxWeight = 140.0f;
     float _minWeight = 40.0f;
     float _startWeight = 100.0f;
     float _decreaseWeight = 0.1f;
     float _currentWeight = 0.0f;
-
+    float _goalWeight = 60.0f;
     public float GetMaxWeight()
     {
         return _maxWeight;
@@ -128,11 +201,34 @@ public class Player : MonoBehaviour
     }
 
     //test하기위해 public으로
-    public float _maxSpeed = 35.0f;
-    public float _addSpeed = 0.01f;
+    float _maxSpeed = 15.0f;
+    float _addSpeed = 0.05f;
+    float _jumpSpeed = 35.0f;
 
-    public float _jumpSpeed = 10.0f;
-    
+    public float GetmaxSpeed()
+    {
+        return _maxSpeed;
+    }
+    public float GetSpeed()
+    {
+        return _veloctity.x;
+    }
+
+    public bool CanDoubleJump()
+    {
+        if (70.0f > _currentWeight)
+            return true;
+        else
+            return false;
+    }
+
+    public bool IsSuccess()
+    {
+        if (eState.COMPLETE == _state)
+            return true;
+        return false;
+    }
+
     public void ChangeState(eState state)
     {
         _state = state;
@@ -150,6 +246,11 @@ public class Player : MonoBehaviour
                 PlayerView.RunState();
                 break;
             case eState.DEATH:
+                _veloctity.x = 0.0f;
+                _veloctity.y = 0.0f;
+                PlayerView.IdleState();
+                break;
+            case eState.COMPLETE:
                 _veloctity.x = 0.0f;
                 _veloctity.y = 0.0f;
                 PlayerView.IdleState();
