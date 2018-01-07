@@ -16,4 +16,18 @@ public class Block : MonoBehaviour
     {
 
     }
+
+    bool IS_collison=false;
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if ("Player" == collision.tag)
+        {
+            if (false == IS_collison)
+            {
+                MainGameManger.instance.GetPlayer().RestSpeed();
+                IS_collison = true;
+            }
+        }
+    }
 }

@@ -55,6 +55,11 @@ public class Player : MonoBehaviour
 
     void UpdateWeight()
     {
+        _decreaseWeight = (_currentWeight-40.0f ) / 100.0f;//140 < > 40
+
+        if (_decreaseWeight >= 0.2f)
+            _decreaseWeight = 0.2f;
+
         _currentWeight -= _decreaseWeight;
         if (_currentWeight < _minWeight)
             _currentWeight = _minWeight;

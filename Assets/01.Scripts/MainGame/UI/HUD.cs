@@ -32,8 +32,7 @@ public class HUD : MonoBehaviour
             JumpInfoText.text = "더블점프여부:불가";
         }
 
-        float remainDistance = MainGameManger.instance.GetPlayer().getMaxDistance() - MainGameManger.instance.GetPlayer().GetDistance();
-        RemainingDistanceText.text = "남은거리" + remainDistance.ToString("N2");
+
 
     }
 }
