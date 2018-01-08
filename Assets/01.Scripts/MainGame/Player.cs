@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.SceneManagement;
 //플레이어 관련 알고리즘 (상태 ,입력, 등등 )
 public class Player : MonoBehaviour
 {
@@ -14,6 +14,8 @@ public class Player : MonoBehaviour
         _distance = 0.0f;
 
         PlayerView.Init(this);
+
+        
     }
 
     void Update()
@@ -39,6 +41,10 @@ public class Player : MonoBehaviour
             UpdateHP();
 
             UpdateSpeedByWeight();
+        }
+        if (_state== eState.COMPLETE)
+        {
+            SceneManager.LoadScene("GameResult");
         }
     }
     void UpdateDistance()
@@ -66,6 +72,8 @@ public class Player : MonoBehaviour
         if (_currentWeight > _maxWeight)
             _currentWeight = _maxWeight;
 
+
+        transform.localScale = new Vector3(_currentWeight/60.0f,1.0f,1.0f);
     }
 
     void UpdateHP()
@@ -149,14 +157,12 @@ public class Player : MonoBehaviour
             return false;
     }
 
-    public bool iSComPlete()
+    public float iSComPlete()
     {
         float deltaWeight = _goalWeight - _currentWeight;
         float deltaWeightOffset = Mathf.Abs(deltaWeight);
 
-        if (deltaWeightOffset < 5.0f)
-            return true;
-        return false;
+        return deltaWeightOffset;
     }
 
     float _maxDistance=500.0f;
@@ -184,6 +190,7 @@ public class Player : MonoBehaviour
     float _decreaseWeight = 0.1f;
     float _currentWeight = 0.0f;
     float _goalWeight = 60.0f;
+
     public float GetMaxWeight()
     {
         return _maxWeight;
