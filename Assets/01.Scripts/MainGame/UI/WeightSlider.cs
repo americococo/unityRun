@@ -20,5 +20,10 @@ public class WeightSlider : MonoBehaviour
         float rate =  CurrentLength / maxLength;
 
         gameObject.GetComponent<Slider>().value = rate;
+
+        if (MainGameManger.instance.GetPlayer().IsSuccess())
+        {
+            gameObject.gameObject.SetActive(false);
+        }
     }
 }

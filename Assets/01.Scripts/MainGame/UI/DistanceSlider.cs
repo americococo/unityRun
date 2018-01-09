@@ -18,6 +18,11 @@ public class DistanceSlider : MonoBehaviour
         float Current_Distance = MainGameManger.instance.GetPlayer().GetDistance();
         float Rate = Current_Distance / Goal;
         gameObject.GetComponent<Slider>().value = Rate;
+
+        if (MainGameManger.instance.GetPlayer().IsSuccess())
+        {
+           gameObject.gameObject.SetActive(false);   
+        }
     }
 
 }

@@ -25,6 +25,7 @@ public class MainGameManger : MonoBehaviour
 
     void Start()
     {
+        DontDestroyOnLoad(PlayerCharacterScr);
         StartGame();        
     }
 

@@ -14,8 +14,7 @@ public class Player : MonoBehaviour
         _distance = 0.0f;
 
         PlayerView.Init(this);
-
-        
+       
     }
 
     void Update()
@@ -42,10 +41,11 @@ public class Player : MonoBehaviour
 
             UpdateSpeedByWeight();
         }
-        if (_state== eState.COMPLETE)
+        if(_state== eState.COMPLETE)
         {
-            SceneManager.LoadScene("GameResult");
+            SceneManager.LoadScene("ResultScreen");
         }
+
     }
     void UpdateDistance()
     {
@@ -110,8 +110,6 @@ public class Player : MonoBehaviour
         {
             _maxSpeed = 15.0f;
         }
-
-
     }
 
 
@@ -161,11 +159,12 @@ public class Player : MonoBehaviour
     {
         float deltaWeight = _goalWeight - _currentWeight;
         float deltaWeightOffset = Mathf.Abs(deltaWeight);
-
+        Score += (-(MainGameManger.instance.GetPlayer().iSComPlete() * 0.5f));
+        Score += 10 * (MainGameManger.instance.GetPlayer().GetCurrentHP() / MainGameManger.instance.GetPlayer().GetMaxHP());
         return deltaWeightOffset;
     }
 
-    float _maxDistance=500.0f;
+    float _maxDistance=100.0f;
     float _distance=0.0f;
 
     public float GetGoalWeight()
@@ -273,6 +272,8 @@ public class Player : MonoBehaviour
 
     Vector2 _veloctity = Vector2.zero;
 
+    float Score;
+
     public Vector2 GetVelocity()
     {
         return _veloctity;
@@ -280,5 +281,9 @@ public class Player : MonoBehaviour
     public void RestSpeed()
     {
         _veloctity.x=0.0f;
+    }
+    public float GetScore()
+    {
+        return Score;
     }
 }

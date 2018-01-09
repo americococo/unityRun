@@ -8,8 +8,6 @@ public class HUD : MonoBehaviour
     public Text MaxSpeedText;
     public Text CurrentSpeedText;
     public Text JumpInfoText;
-    public Text RemainingDistanceText;
-
 
     void Start()
     {
@@ -31,7 +29,10 @@ public class HUD : MonoBehaviour
         {
             JumpInfoText.text = "더블점프여부:불가";
         }
-
+        if(MainGameManger.instance.GetPlayer().IsSuccess())
+        {
+            gameObject.SetActive(false);
+        }
 
 
     }

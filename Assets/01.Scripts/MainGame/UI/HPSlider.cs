@@ -15,5 +15,11 @@ public class HPSlider : MonoBehaviour
         float currentHP = MainGameManger.instance.GetPlayer().GetCurrentHP();
         float rate = currentHP / maxHP;
         gameObject.GetComponent<Slider>().value = rate;
+
+        if (MainGameManger.instance.GetPlayer().IsSuccess())
+        {
+            gameObject.gameObject.SetActive(false);
+        }
+
     }
 }
